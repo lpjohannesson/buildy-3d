@@ -4,7 +4,7 @@ class_name UI
 @export var material_container: Control
 @export var material_button_scene: PackedScene
 
-var selected_material_index := 0
+var material_index := 0
 
 func _ready() -> void:
 	(func():
@@ -17,7 +17,7 @@ func _ready() -> void:
 			material_container.add_child(button)
 			
 			button.pressed.connect(func():
-				selected_material_index = i)
+				material_index = i)
 			
 			button.texture_normal = material.albedo_texture
 	).call_deferred()
