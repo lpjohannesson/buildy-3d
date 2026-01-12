@@ -1,0 +1,86 @@
+[gd_scene load_steps=14 format=3 uid="uid://yu0twbonkcut"]
+
+[ext_resource type="Script" uid="uid://ykxx8jyvwdsm" path="res://node_3d.gd" id="1_a202f"]
+[ext_resource type="Texture2D" uid="uid://buj0exlost0mc" path="res://assets/textures/dirt.png" id="2_jsk3o"]
+[ext_resource type="Script" uid="uid://cdap5ug8s3eas" path="res://cursor_manager.gd" id="2_noarx"]
+[ext_resource type="Texture2D" uid="uid://0645kmgf3wc" path="res://assets/textures/stone.png" id="3_4arys"]
+[ext_resource type="Script" uid="uid://bw82nbf88vilj" path="res://ui.gd" id="3_r3fl7"]
+[ext_resource type="Texture2D" uid="uid://dh4oqdsask6c6" path="res://assets/textures/wood_planks.png" id="4_6iypd"]
+[ext_resource type="PackedScene" uid="uid://6w4hdfbn08kc" path="res://material_button.tscn" id="4_i5arm"]
+[ext_resource type="PackedScene" uid="uid://drg1ucx4h7t4p" path="res://color_button.tscn" id="4_jka67"]
+
+[sub_resource type="VoxelMaterial" id="VoxelMaterial_i5arm"]
+texture = ExtResource("2_jsk3o")
+
+[sub_resource type="VoxelMaterial" id="VoxelMaterial_tereu"]
+texture = ExtResource("3_4arys")
+
+[sub_resource type="VoxelMaterial" id="VoxelMaterial_cdqbm"]
+texture = ExtResource("4_6iypd")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_noarx"]
+top_radius = 0.0
+height = 1.0
+radial_segments = 8
+rings = 0
+cap_top = false
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a0tk4"]
+albedo_color = Color(1, 0, 1, 1)
+
+[node name="Node3D" type="Node3D" node_paths=PackedStringArray("voxel_manager", "ui", "camera")]
+script = ExtResource("1_a202f")
+voxel_manager = NodePath("VoxelManager")
+ui = NodePath("UI")
+camera = NodePath("Camera3D")
+
+[node name="VoxelManager" type="VoxelManager" parent="."]
+materials = Array[VoxelMaterial]([SubResource("VoxelMaterial_i5arm"), SubResource("VoxelMaterial_tereu"), SubResource("VoxelMaterial_cdqbm")])
+material_colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1, 1, 0.49803922, 0.49803922, 1, 0.49803922, 1, 0.49803922, 1, 0.49803922, 0.49803922, 1, 1, 1, 1, 0.49803922, 1, 0.49803922, 1, 1, 1, 1, 0.49803922, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.70064783, -0.51238835, 0.49653888, -4.714304e-08, 0.6959128, 0.71812636, -0.71350735, -0.5031537, 0.48758972, 13.626178, 13.318, 20.018)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.844627, 0.24172145, -0.4776777, -1.636859e-08, 0.8922629, 0.45151612, 0.5353552, -0.38136274, 0.75362945, 0, 11.165092, 0)
+shadow_enabled = true
+
+[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("material_container", "color_container")]
+script = ExtResource("3_r3fl7")
+material_container = NodePath("Panel/MaterialContainer")
+color_container = NodePath("Panel/ColorContainer")
+material_button_scene = ExtResource("4_i5arm")
+color_button_scene = ExtResource("4_jka67")
+
+[node name="CursorManager" type="Control" parent="UI" node_paths=PackedStringArray("cursor_point")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("2_noarx")
+cursor_point = NodePath("../../CursorPoint")
+
+[node name="Panel" type="Panel" parent="UI"]
+offset_right = 179.0
+offset_bottom = 115.0
+
+[node name="MaterialContainer" type="HBoxContainer" parent="UI/Panel"]
+layout_mode = 1
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="ColorContainer" type="HBoxContainer" parent="UI/Panel"]
+layout_mode = 1
+offset_left = 8.0
+offset_top = 40.0
+offset_right = 8.0
+offset_bottom = 40.0
+
+[node name="CursorPoint" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CursorPoint"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.25, 0)
+mesh = SubResource("CylinderMesh_noarx")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_a0tk4")
