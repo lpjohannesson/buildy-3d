@@ -1,9 +1,7 @@
 #include "register_types.h"
 
 #include "voxel_manager.h"
-#include "voxel_material.h"
-#include "handles/voxel_cell_handle.h"
-#include "handles/voxel_cell_material_handle.h"
+#include "voxel_cell_handle.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -17,9 +15,7 @@ void initialize_voxelmanager_module(ModuleInitializationLevel p_level) {
 	}
 
 	GDREGISTER_RUNTIME_CLASS(VoxelManager);
-	GDREGISTER_RUNTIME_CLASS(VoxelMaterial);
 	GDREGISTER_RUNTIME_CLASS(VoxelCellHandle);
-	GDREGISTER_RUNTIME_CLASS(VoxelCellMaterialHandle);
 }
 
 void uninitialize_voxelmanager_module(ModuleInitializationLevel p_level) {

@@ -14,16 +14,13 @@ void VoxelManager::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("get_materials"), &VoxelManager::get_materials);
 	ClassDB::bind_method(D_METHOD("set_materials", "materials"), &VoxelManager::set_materials);
+	
 	ADD_PROPERTY(PropertyInfo(
         Variant::ARRAY, 
         "materials", 
         PROPERTY_HINT_TYPE_STRING, 
-        vformat("%d/%d:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "VoxelMaterial")
+        vformat("%d/%d:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "StandardMaterial3D")
     ), "set_materials", "get_materials");
-
-	ClassDB::bind_method(D_METHOD("get_material_colors"), &VoxelManager::get_material_colors);
-	ClassDB::bind_method(D_METHOD("set_material_colors", "material_colors"), &VoxelManager::set_material_colors);
-	ADD_PROPERTY(PropertyInfo(Variant::PACKED_COLOR_ARRAY, "material_colors"), "set_material_colors", "get_material_colors");
 }
 
 VoxelCellHandle *VoxelManager::get_cell(Vector3i voxel_position) const {
@@ -34,20 +31,12 @@ void VoxelManager::set_cell(Vector3i voxel_position, VoxelCellHandle *cell_handl
 	cells[voxel_position.x][voxel_position.y][voxel_position.z] = cell_handle->cell;
 }
 
-TypedArray<Ref<VoxelMaterial>> VoxelManager::get_materials() const {
+TypedArray<Ref<StandardMaterial3D>> VoxelManager::get_materials() const {
 	return materials;
 }
 
-void VoxelManager::set_materials(const TypedArray<Ref<VoxelMaterial>> &materials) {
+void VoxelManager::set_materials(const TypedArray<Ref<StandardMaterial3D>> &materials) {
 	this->materials = materials;
-}
-
-PackedColorArray VoxelManager::get_material_colors() const {
-	return material_colors;
-}
-
-void VoxelManager::set_material_colors(const PackedColorArray &material_colors) {
-	this->material_colors = material_colors;
 }
 
 void VoxelManager::update_map() {
@@ -64,9 +53,7 @@ void VoxelManager::update_map() {
 				csg_combiner->add_child(csg_box);
 
 				csg_box->set_position(Vector3(x, y, z) + Vector3(0.5, 0.5, 0.5));
-
-				Ref<StandardMaterial3D> mesh_material = mesh_material_sets[cell.material.material_index][cell.material.color_index];
-				csg_box->set_material(mesh_material);
+				csg_box->set_material(materials[cell.material_index]);
 			}
 		}
 	}
@@ -95,22 +82,6 @@ void VoxelManager::_ready() {
 
 	shape = memnew(CollisionShape3D);
 	body->add_child(shape);
-
-	for (const Ref<VoxelMaterial> &material : materials) {
-		const Ref<Texture2D> &texture = material->texture;
-
-		mesh_material_sets.push_back({});
-		auto &mesh_material_set = mesh_material_sets.back();
-
-		for (int i = 0; i < material_colors.size(); i++) {
-			Ref<StandardMaterial3D> mesh_material = memnew(StandardMaterial3D);
-			
-			mesh_material->set_texture(BaseMaterial3D::TEXTURE_ALBEDO, texture);
-			mesh_material->set_albedo(material_colors[i]);
-
-			mesh_material_set[i] = mesh_material;
-		}
-	}
 }
 
 VoxelManager::VoxelManager() {}

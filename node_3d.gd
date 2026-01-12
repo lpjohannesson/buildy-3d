@@ -9,15 +9,10 @@ static var instance: GameScene
 
 func _ready() -> void:
 	instance = self
-	
-	var material_handle := VoxelCellMaterialHandle.new()
-	material_handle.set_material_index(0)
-	material_handle.set_color_index(0)
-	
 	var cell_handle := VoxelCellHandle.new()
 	
 	cell_handle.set_shape_index(1)
-	cell_handle.set_material(material_handle)
+	cell_handle.set_material_index(0)
 	
 	for x in range(16):
 		for z in range(16):

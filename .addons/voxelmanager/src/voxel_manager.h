@@ -5,10 +5,7 @@
 #include <godot_cpp/classes/static_body3d.hpp>
 #include <godot_cpp/classes/collision_shape3d.hpp>
 #include <godot_cpp/classes/standard_material3d.hpp>
-#include "handles/voxel_cell_handle.h"
-#include "voxel_material.h"
-#include <vector>
-#include <array>
+#include "voxel_cell_handle.h"
 
 namespace godot {
 	class VoxelManager : public Node3D {
@@ -26,19 +23,13 @@ namespace godot {
 			StaticBody3D *body;
 			CollisionShape3D *shape;
 
-			TypedArray<Ref<VoxelMaterial>> materials;
-			PackedColorArray material_colors;
-
-			std::vector<std::array<Ref<StandardMaterial3D>, 16>> mesh_material_sets;
+			TypedArray<Ref<StandardMaterial3D>> materials;
 
 			VoxelCellHandle *get_cell(Vector3i voxel_position) const;
 			void set_cell(Vector3i voxel_position, VoxelCellHandle *cell_handle);
 
-			TypedArray<Ref<VoxelMaterial>> get_materials() const;
-			void set_materials(const TypedArray<Ref<VoxelMaterial>> &materials);
-
-			PackedColorArray get_material_colors() const;
-			void set_material_colors(const PackedColorArray &material_colors);
+			TypedArray<Ref<StandardMaterial3D>> get_materials() const;
+			void set_materials(const TypedArray<Ref<StandardMaterial3D>> &materials);
 
 			void update_map();
 			void bake_map();

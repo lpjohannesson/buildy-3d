@@ -57,7 +57,7 @@ func _input(event: InputEvent) -> void:
 		MOUSE_BUTTON_RIGHT:
 			var cell_handle := VoxelCellHandle.new()
 			cell_handle.set_shape_index(1)
-			cell_handle.set_material(GameScene.instance.ui.selected_material)
+			cell_handle.set_material_index(GameScene.instance.ui.selected_material_index)
 			
 			voxel_manager.set_cell(
 				voxel_position + Vector3i(screen_cast.normal),
